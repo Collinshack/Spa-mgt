@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<h1 >RECORDS</h1></br>
+
+<table class="table table-striped table-hover table-bordered">
+  <thead  class="table table-dark table-sm">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Phone</th>
+        <th scope="col">Service</th>
+        <th scope="col">Value</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+  {% if records %}
+  {% for record in records %}
+     <tr>
+     <td><a href="{%url 'record' record.id %}">{{ record.id }}</a></td>
+     <td>{{ record.first_name }}</td>
+     <td>{{ record.last_name }}</td>
+     <td>{{ record.phone }}</td>
+     <td>{{ record.service }}</td>
+     <td>{{ record.value }}</td>
+     <td>{{ record.amount }}</td>
+     <td>{{ record.created_at }}</td>
+     </tr>
+
+  {% endfor %}
+{% endif %}
+
+  </tbody>
+</table>
+
+<div class="card">
+  <img src="..." class="card-img-top" alt="...">
+
+  <div class="card-body">
+    <h2 class="card-title"><b>Physical Card</b></h2>
+    <p class="card-text">Генерируйте уникальные ключи для физических карт</p>
+    <a href="{%url 'phygenerate' %}" class="btn btn-primary">Generate</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    Read Physical Card
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Purchase</h5>
+    <p class="card-text">Confirm physical card unique id.</p>
+    <a href="#" class="btn btn-primary">Make Purchase</a>
+  </div>
+</div>
+
+</br>
+<div class="card">
+  <img src="..." class="card-img-top" alt="...">
+
+  <div class="card-body">
+    <h2 class="card-title"><b>Electronic Card</b></h2>
+    <p class="card-text">Generate QR code and build electronic receipts.</p>
+
+    <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Создать
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{%url 'electric_sum' %}">На Сумму</a></li>
+    <li><a class="dropdown-item" href="{%url 'electric_service' %}">На Услугу</a></li>
+  </ul>
+</div>
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    Погасить карту
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Purchase</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Scan QR code</a>
+  </div>
+</div>
+
+
+{% else %}
+
+
+
+<h1>Administration Login</h1>
+<form method="POST" action="{% url 'home' %}">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">User ID</label>
+    <input type="text" class="form-control" name="username" placeholder="Username" required>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" class="form-control", name="password" placeholder="Password" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
+{% endif %}
+{% endblock %}

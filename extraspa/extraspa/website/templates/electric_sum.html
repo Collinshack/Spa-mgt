@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Electric Sum</h1>
+
+<form method="post" action="electric_sum">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Generate QR code</button>
+</form>
+
+{% endblock %}
