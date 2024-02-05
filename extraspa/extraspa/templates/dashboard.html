@@ -1,0 +1,53 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Main Content Section -->
+
+<div class="container">
+    {% if user.is_authenticated %}
+    <div class="records_section mt-2">
+       <br />
+
+<!-- Search Form -->
+<form id="search-form" hx-post="{% url 'search_electronic_card_sum' %}" hx-target="#table-body-content">
+    {% csrf_token %}
+    <div class="d-flex justify-content-end mb-4">
+       
+        <input type="text"
+            hx-post="{% url 'search_electronic_card_sum' %}" 
+            hx-target='#table-body-content'
+            hx-trigger="keyup changed delay:500ms"
+            name="search"
+            class="form-control-sm mr-2" 
+            placeholder="Search by ID..." />
+    </div>
+</form>
+<!-- End Search Form -->
+
+    
+
+
+
+
+        
+     <div><h2>ELECTRONIC CARDS BY SUM</h2></div>
+            
+        <!-- Include the search results partial -->
+        {% include 'partials/search_results.html' %}
+    </div>
+
+
+    <!-- End Search Form -->
+  
+    <!-- Include the search results for ELECTRONIC SERVICE partial -->
+    {% include 'electronic_cards_service_records.html' %}
+
+    {% endif %}
+    <!-- End Main Content Section -->
+
+
+
+
+
+{% endblock %}

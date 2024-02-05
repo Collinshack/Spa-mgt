@@ -1,0 +1,66 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+<div class="container mb-5">
+    <h1 class="text-center mb-4">Electric Sum</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" action="{% url 'generate_electronic_card' %}" class="needs-validation" novalidate>
+                {% csrf_token %}
+                {% for field in form.visible_fields %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {% if field.name == 'type' %}
+                            {{ field }}
+                        {% elif field.name == 'service' %}
+                            <div id="service_field" style="display: {% if form.instance.type == 'service' %} block {% else %} none {% endif %}">
+                                {{ field }}
+                            </div>
+                        {% elif field.name == 'value' %}
+                            <div id="value_field" style="display: {% if form.instance.type == 'service' %} block {% else %} none {% endif %}">
+                                {{ field }}
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <input type="hidden" name="uniquec" value="{{ form.initial.uniquec }}">
+                <button type="submit" class="btn btn-primary">Generate cARD</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the type field
+        var typeField = document.querySelector('#id_type');
+        
+        // Get the service field and value field divs
+        var serviceField = document.querySelector('#service_field');
+        var valueField = document.querySelector('#value_field');
+        
+        // Add event listener to the type field
+        typeField.addEventListener('change', function() {
+            if (typeField.value === 'service') {
+                // If type is service, show the service and value fields
+                serviceField.style.display = 'block';
+                valueField.style.display = 'block';
+            } else {
+                // If type is usual, hide the service and value fields
+                serviceField.style.display = 'none';
+                valueField.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+{% endblock %}

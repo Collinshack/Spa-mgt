@@ -1,0 +1,88 @@
+{% load static %}
+{% block content %}
+ <!-- bootstrap core css -->
+
+
+<div class="table-responsive mt-3" style="padding-bottom: 0px;">
+    <div class="container mt-3">
+        
+          <!-- Search Form -->
+    <form id="search-form" hx-get="{% url 'search_physical_card_service' %}" hx-target="#table-body-content4">
+        <div class="d-flex justify-content-end mb-4">
+            {% csrf_token %}
+            <input type="text"
+                hx-post="{% url 'search_physical_card_service' %}" 
+                hx-target='#table-body-content4'
+                hx-trigger="keyup changed delay:500ms"
+                name="search"
+                class="form-control-sm mr-2" 
+                placeholder="Search by ID..." />
+        </div>
+    </form>
+    <!-- End Search Form -->
+        
+
+
+        
+        
+        <!-- Wrap the table body content in a separate div -->
+        <div id="table-body-content4">
+            <table class="table table-striped table-hover table-bordered" id="">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Service</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Purchase Frequency</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if physical_cards_service %}
+                    {% for record in physical_cards_service %}
+                    <tr>
+                        <td>{{ record.uniquec }}</td>
+                        <td>{{ record.first_name }}</td>
+                        <td>{{ record.last_name }}</td>
+                        <td>{{ record.phone }}</td>
+                        <td>{{ record.service }}</td>
+                        <td>{{ record.service_value }}</td>
+                        <td>{{ record.purchased_frequency }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'physical_card_service_deduct_amount' record.pk  %}">
+                                {% csrf_token %}
+                                <input type="number" name="deduct_amount" placeholder="Enter amount to deduct" required>
+                                <button type="submit">Deduct</button>
+                            </form>
+                        </td>
+                        <td>{% if record.purchased_frequency == 0 %}<span style="color: red;">{{record.status}}</span>{% else %}<span style="color: green;">{{record.status}}</span>{% endif %}</td>
+                        <td>{{ record.created_at }}</td>
+                    </tr>
+                    
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="8">No records found.</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+<br />
+                    <br />
+                    <br />
+                    <br />
+
+{% endblock %}
+
+
+
+

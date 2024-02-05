@@ -1,0 +1,30 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+<div class="container mb-5">
+    <h1 class="text-center mb-4">Create Electronic Cards by Service</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" action="{% url 'generate_electronic_card_service' %}" class="needs-validation" novalidate>
+                {% csrf_token %}
+                {% for field in form.visible_fields %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <input type="hidden" name="uniquec" value="{{ form.initial.uniquec }}">
+                <button type="submit" class="btn btn-primary">Submit & Create Card</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

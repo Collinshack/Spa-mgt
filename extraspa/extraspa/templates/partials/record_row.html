@@ -1,0 +1,22 @@
+<tr id="record-{{ record.pk }}">
+    <td>{{ record.uniquec }}</td>
+    <td>{{ record.first_name }}</td>
+    <td>{{ record.last_name }}</td>
+    <td>{{ record.phone }}</td>
+    <td id="amount-{{ record.pk }}">{{ record.amount }}</td>
+    <td>
+        <form hx-post="{% url 'electronic_card_sum_deduct_amount' record.pk %}" hx-trigger="submit" hx-swap="outerHTML" hx-target="#record-{{ record.pk }}">
+            {% csrf_token %}
+            <input type="number" name="deduct_amount" placeholder="Enter amount to deduct" required>
+            <button type="submit">Deduct</button>
+        </form>
+    </td>
+    <td id="status-{{ record.pk }}">
+        {% if record.amount == 0 %}
+            <span style="color: red;">{{ record.status }}</span>
+        {% else %}
+            <span style="color: green;">{{ record.status }}</span>
+        {% endif %}
+    </td>
+    <td>{{ record.created_at }}</td>
+</tr>

@@ -1,0 +1,56 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main_content">
+<h1>Register New Cards</h1>
+<br />
+
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Physical Card</h5>
+        <p class="card-text">Generate physical cards and build electronic receipts</p>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Создать
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'generate_physical_card_sum' %}">На Сумму</a>
+            <a class="dropdown-item" href="{% url 'generate_physical_card_service' %}">На Услугу</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      <br />
+      <br />
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Electronic Card</h5>
+            <p class="card-text">Generate electronic cards and build electronic receipts</p>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Создать
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'generate_electronic_card_sum' %}">На Сумму</a>
+                <a class="dropdown-item" href="{% url 'generate_electronic_card_service' %}">На Услугу</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+
+</div>
+</div>
+</div>
+{% endblock %}

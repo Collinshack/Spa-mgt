@@ -1,0 +1,263 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экстраспа</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'mysite/css/bootstrap.css' %}" />
+
+
+   
+    
+    <!-- Custom CSS -->
+    <style>
+        /* Custom styles */
+        body {
+            font-family: Arial, sans-serif;
+            color: #000;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 188px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #000;
+            padding-top: 70px;
+            transition: left 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .header_section,
+        .footer {
+            background-color: orange;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header_section h2,
+        .footer p {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .user-welcome {
+            font-size: 16px;
+        }
+
+        .main_content {
+            margin-left: 160px;
+            padding-top: 70px;
+            padding-bottom: 70px;
+            padding-left: 35px;
+            padding-right: 60px;
+            transition: margin-left 0.3s;
+            min-height: calc(100vh - 70px);
+            box-sizing: border-box;
+        }
+
+        .footer {
+            bottom: 0;
+            width: 100%;
+        }
+
+        .table th,
+        .table td {
+            color: #000;
+        }
+
+        .deduct-column {
+            position: relative;
+        }
+
+        .deduct-column .deduct-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .deduct-column .deduct-form input {
+            margin-right: 10px;
+        }
+
+        /* Toggle Button */
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 160px; /* Adjusted position to the right of the site header title */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 24px;
+            width: 30px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .toggle-btn span {
+            background-color: #fff;
+            height: 3px;
+            width: 100%;
+            border-radius: 2px;
+            transition: all 0.3s;
+            display: block;
+        }
+
+        .toggle-btn.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .toggle-btn.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .toggle-btn.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .header_section h2 {
+                font-size: 20px;
+            }
+            .user-welcome {
+                display: none;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .main_content {
+                margin-left: 0;
+                padding-top: 100px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 100%;
+                left: -100%;
+                padding-top: 60px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .main_content {
+                margin-left: 0;
+                padding-top: 60px;
+            }
+            .footer {
+                padding: 15px 20px;
+                position: relative;
+                bottom: auto;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .toggle-btn {
+                top: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="{% url 'home' %}">Homepage</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'records' %}">Physical Cards</a>
+        <a href="{% url 'register_cards' %}">Register New Cards</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+    </div>
+    <!-- End Sidebar -->
+
+    <!-- Header Section -->
+    <header class="header_section">
+        <div class="toggle-btn" onclick="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <h2>Экстраспа</h2>
+        {% if user.is_authenticated %}
+        <p class="user-welcome">Welcome back, {{ request.user }}!</p>
+        {% endif %}
+    </header>
+    <!-- End Header Section -->
+
+    <!-- Main Content -->
+    <div class="main_content">
+        <!-- Content Section -->
+        <div class="content_section">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <!-- End Content Section -->
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Экстраспа. All rights reserved.</p>
+        </div>
+    </footer>
+    <!-- End Footer Section -->
+
+    <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="{% static 'mysite/js/jquery-3.4.1.min.js' %}"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="{% static 'mysite/js/bootstrap.js' %}"></script>
+    <!-- Custom JS -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("open");
+        }
+    </script>
+
+     <!-- HTMX Codes -->
+     <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+</body>
+
+</html>
+
+

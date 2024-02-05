@@ -1,0 +1,43 @@
+<!-- create_service_customer_card.html -->
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+<div class="container mb-5">
+    <h1 class="text-center mb-4">Create Service Card</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" action="{% url 'create_service_cards' %}" class="needs-validation" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {% if field.name == 'service' %}
+                            <select name="{{ field.name }}" class="form-control">
+                                <option value="">Select a service</option>
+                                {% for service in form.service.field.queryset %}
+                                    <option value="{{ service.id }}">{{ service.name }}</option>
+                                {% endfor %}
+                            </select>
+                        {% elif field.name == 'value' %}
+                            <!-- Include value field as a hidden input -->
+                            <input type="hidden" name="{{ field.name }}" value="{{ field.value }}">
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <input type="hidden" name="uniquec" value="{{ form.initial.uniquec }}">
+                <button type="submit" class="btn btn-primary">Generate QR code</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

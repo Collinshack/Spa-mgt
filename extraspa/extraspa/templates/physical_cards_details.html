@@ -1,0 +1,33 @@
+
+
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    
+
+<div class="col-md-12">
+
+    <!-- Messages display area -->
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+            <strong>{{message}}</strong> 
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+{% include 'physical_cards_sum_records.html' %}
+</div>
+<div class="col-md-12">
+{% include 'physical_cards_service_records.html' %}
+</div>
+</div>
+{% endblock %}
