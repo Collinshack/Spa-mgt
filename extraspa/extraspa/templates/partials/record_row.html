@@ -7,8 +7,8 @@
     <td>
         <form hx-post="{% url 'electronic_card_sum_deduct_amount' record.pk %}" hx-trigger="submit" hx-swap="outerHTML" hx-target="#record-{{ record.pk }}">
             {% csrf_token %}
-            <input type="number" name="deduct_amount" placeholder="Enter amount to deduct" required>
-            <button type="submit">Deduct</button>
+            <input type="number" name="deduct_amount" placeholder="Введите сумму для вычета" required>
+            <button type="submit">Вычитать</button>
         </form>
     </td>
     <td id="status-{{ record.pk }}">

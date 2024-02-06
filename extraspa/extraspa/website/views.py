@@ -70,10 +70,10 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, "You've been logged in")
+            messages.success(request, "Вы вошли в систему")
             return redirect('dashboard')
         else:
-            messages.success(request, "Error logging in")
+            messages.success(request, "Ошибка при входе в систему")
             return redirect('login')
     else:
         return render(request, 'spa_admin_login.html')
@@ -83,7 +83,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    messages.success(request, "You have been logged out")
+    messages.success(request, "Вы вышли из системы")
     return redirect('home')
 
 
@@ -370,7 +370,7 @@ def electronic_card_sum_deduct_amount(request, pk):
         elect_gen.save()
 
         # Add a success message
-        messages.success(request, "Deduction successful!")
+        messages.success(request, "Вывод успешен!")
 
         return redirect('dashboard')
 
@@ -388,7 +388,7 @@ def physical_card_sum_deduct_amount(request, pk):
         amount = int(elect_gen.amount)
 
         if deduct_amount > amount:
-            messages.warning(request, "Insufficient funds!")
+            messages.warning(request, "Недостаточно средств!")
             return redirect('records')  # Redirect back to dashboard or any desired page
 
         # Deduct the specified amount
@@ -405,7 +405,7 @@ def physical_card_sum_deduct_amount(request, pk):
         elect_gen.save()
 
         # Add a success message
-        messages.success(request, "Deduction successful!")
+        messages.success(request, "успешное удержание суммы!")
 
         return redirect('records')
 
@@ -423,7 +423,7 @@ def physical_card_service_deduct_amount(request, pk):
         amount = int(elect_gen.purchased_frequency)
 
         if deduct_amount > amount:
-            messages.warning(request, "Insufficient funds!")
+            messages.warning(request, "Недостаточно средств!")
             return redirect('records')  # Redirect back to dashboard or any desired page
 
         # Deduct the specified amount
@@ -440,7 +440,7 @@ def physical_card_service_deduct_amount(request, pk):
         elect_gen.save()
 
         # Add a success message
-        messages.success(request, "Deduction successful!")
+        messages.success(request, "успешное удержание суммы!")
 
         return redirect('records')
 
@@ -457,7 +457,7 @@ def electronic_card_service_deduct_amount(request, pk):
         amount = int(elect_gen.purchased_frequency)
 
         if deduct_amount > amount:
-            messages.warning(request, "Insufficient funds!")
+            messages.warning(request, "Недостаточно средств!")
             return redirect('dashboard')  # Redirect back to dashboard or any desired page
 
         # Deduct the specified amount

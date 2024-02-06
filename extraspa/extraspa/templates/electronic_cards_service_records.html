@@ -5,7 +5,7 @@
 
 <div class="table-responsive mt-3" style="padding-bottom: 0px;">
     <div class="container mt-3">
-        <h2>ELECTRONIC CARDS BY SERVICE</h2>
+        <h2>ЭЛЕКТРОННЫЕ КАРТОЧКИ НА УСЛУГИ</h2>
           <!-- Search Form -->
     <form id="search-form" hx-get="{% url 'search_electronic_card_service' %}" hx-target="#table-body-content6">
         <div class="d-flex justify-content-end mb-4">
@@ -16,7 +16,7 @@
                 hx-trigger="keyup changed delay:500ms"
                 name="search"
                 class="form-control-sm mr-2" 
-                placeholder="Search by ID..." />
+                placeholder="Поиск по ID..." />
         </div>
     </form>
     <!-- End Search Form -->
@@ -31,15 +31,15 @@
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Service</th>
-                        <th scope="col">Value</th>
-                        <th scope="col">Purchase Frequency</th>
-                        <th scope="col">Action</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Created At</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Фамилия</th>
+                        <th scope="col">Телефон</th>
+                        <th scope="col">Услуга</th>
+                        <th scope="col">сумма</th>
+                        <th scope="col">Количество</th>
+                        <th scope="col">Действие</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col">время создания</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,7 +60,7 @@
                             <form method="POST" action="{% url 'electronic_card_service_deduct_amount' record.pk  %}">
                                 {% csrf_token %}
                                 <input type="number" name="deduct_amount" placeholder="Enter amount to deduct" required>
-                                <button type="submit">Deduct</button>
+                                <button type="submit">Вычитать</button>
                             </form>
                         </td>
                         <td>{% if record.purchased_frequency == 0 %}<span style="color: red;">{{record.status}}</span>{% else %}<span style="color: green;">{{record.status}}</span>{% endif %}</td>
@@ -70,7 +70,7 @@
                     {% endfor %}
                     {% else %}
                     <tr>
-                        <td colspan="8">No records found.</td>
+                        <td colspan="8">Записей не найдено.</td>
                     </tr>
                     {% endif %}
                 </tbody>

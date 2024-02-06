@@ -26,13 +26,13 @@
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">CARD ID</th>
-                        <th scope="col">FIRST NAME</th>
-                        <th scope="col">LAST NAME</th>
-                        <th scope="col" id="phone">PHONE</th>
-                        <th scope="col">AMOUNT</th>
-                        <th scope="col" id="action-column">ACTION</th>
-                        <th scope="col">STATUS</th>
-                        <th scope="col">CREATED AT</th>
+                        <th scope="col">имя</th>
+                        <th scope="col">фамилия</th>
+                        <th scope="col" id="phone">телефон</th>
+                        <th scope="col">сумма</th>
+                        <th scope="col" id="action-column">действие</th>
+                        <th scope="col">статус</th>
+                        <th scope="col">время создания?</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,7 +47,7 @@
                         <td>
                             <form method="POST" action="{% url 'physical_card_sum_deduct_amount' record.pk %}">
                                 {% csrf_token %}
-                                <input type="number" name="deduct_amount" placeholder="Enter amount to deduct" required>
+                                <input type="number" name="deduct_amount" placeholder="Введите сумму для вычета" required>
                                 <button type="submit">Deduct</button>
                             </form>
                         </td>
@@ -57,7 +57,7 @@
                     {% endfor %}
                     {% else %}
                     <tr>
-                        <td colspan="8">No records found.</td>
+                        <td colspan="8">Записей не найдено.</td>
                     </tr>
                     {% endif %}
                 </tbody>
