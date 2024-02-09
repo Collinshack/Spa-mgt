@@ -13,14 +13,10 @@
         <h5 class="card-title"><b>Физическая карта</b></h5>
         <p class="card-text">Создавайте физические карточки и создавайте электронные квитанции</p>
         <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
+          <a class="btn btn-secondary" type="button" aria-expanded="false" href="{% url 'generate_physical_card_service' %}">
             Создать
-          </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="{% url 'generate_physical_card_sum' %}">На Сумму</a>
-            <a class="dropdown-item" href="{% url 'generate_physical_card_service' %}">На Услугу</a>
-          </div>
+          </a>
+         
         </div>
       </div>
     </div>

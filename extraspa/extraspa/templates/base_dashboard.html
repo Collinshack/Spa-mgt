@@ -8,7 +8,10 @@
     <title>Экстраспа</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'mysite/css/bootstrap.css' %}" />
-
+    <link rel="shortcut icon" href="{% static 'mysite/images/favicon_io/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'mysite/images/favicon_io/apple-touch-icon.png' %}">
+    <link rel="icon" href="{% static 'mysite/images/favicon_io/android-chrome-192x192.png' %}" sizes="192x192">
+  <link rel="icon" href="{% static 'mysite/images/favicon_io/android-chrome-512x512.png' %}" sizes="512x512">
 
    
     
@@ -50,7 +53,8 @@
 
         .header_section,
         .footer {
-            background-color: orange;
+            /* background-color: rgb(160, 101, 11); */
+            background-color: #f2b870;
             color: #fff;
             position: fixed;
             width: 100%;
@@ -184,9 +188,17 @@
                 margin-right: auto;
             }
             .toggle-btn {
-                top: 10px;
-                left: 10px;
-            }
+            position: fixed;
+            top: 20px;
+            left: 130px; /* Adjusted position to the right of the site header title */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 24px;
+            width: 30px;
+            cursor: pointer;
+            z-index: 1001;
+        }
         }
     </style>
 </head>
@@ -195,8 +207,8 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <a href="{% url 'home' %}">Главная</a>
-        <a href="{% url 'dashboard' %}">Электронные карты</a>
+        <a href="{% url 'dashboard' %}">Главная</a>
+        <a href="{% url 'electronic_cards_records' %}">Электронные карты</a>
         <a href="{% url 'records' %}">Физические карты</a>
         <a href="{% url 'register_cards' %}">Регистрируйте новые карты</a>
         {% if user.is_authenticated %}

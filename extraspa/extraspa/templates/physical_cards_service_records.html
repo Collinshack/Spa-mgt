@@ -31,15 +31,14 @@
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Service</th>
-                        <th scope="col">Value</th>
-                        <th scope="col">Purchase Frequency</th>
-                        <th scope="col">Action</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Created At</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Фамилия</th>
+                        
+                        <th scope="col">Услуга</th>
+                        <th scope="col">сумма</th>
+                        <th scope="col">Действие</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col">время создания</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,10 +48,10 @@
                         <td>{{ record.uniquec }}</td>
                         <td>{{ record.first_name }}</td>
                         <td>{{ record.last_name }}</td>
-                        <td>{{ record.phone }}</td>
+                        
                         <td>{{ record.service }}</td>
-                        <td>{{ record.service_value }}</td>
-                        <td>{{ record.purchased_frequency }}</td>
+            
+                        <td>{{ record.amount }}</td>
                         <td>
                             <form method="POST" action="{% url 'physical_card_service_deduct_amount' record.pk  %}">
                                 {% csrf_token %}
@@ -60,7 +59,7 @@
                                 <button type="submit">Deduct</button>
                             </form>
                         </td>
-                        <td>{% if record.purchased_frequency == 0 %}<span style="color: red;">{{record.status}}</span>{% else %}<span style="color: green;">{{record.status}}</span>{% endif %}</td>
+                        <td>{% if record.amount == 0 %}<span style="color: red;">Потрачен</span>{% else %}<span style="color: green;">Активен</span>{% endif %}</td>
                         <td>{{ record.created_at }}</td>
                     </tr>
                     

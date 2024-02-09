@@ -55,7 +55,7 @@
                             </td>
                             
                         
-                        <td>{% if record.amount == 0 %}<span style="color: red;">Spent</span>{% else %}<span style="color: green;">Active</span>{% endif %}</td>
+                            <td>{% if record.amount == 0 %}<span style="color: red;">Потрачен</span>{% else %}<span style="color: green;">Активен</span>{% endif %}</td>
                         <td>{{ record.created_at }}</td>
                     </tr>
                     {% endfor %}

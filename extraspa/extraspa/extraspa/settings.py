@@ -10,12 +10,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '123456' #os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -74,9 +74,9 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'spas',
-#         'USER': 'Admin',
-#         'PASSWORD': 'extraspa12$aaa',
+#         'NAME': os.getenv('NAME'),
+#         'USER': os.getenv('USER'),
+#         'PASSWORD': os.getenv('PASSWORD'),
 #         'HOST': 'localhost',
 #         'PORT': '3306'
 
@@ -119,7 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+STATIC_ROOT = BASE_DIR / 'productionfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static', ]
 
 
 # Default primary key field type
@@ -127,4 +128,4 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+

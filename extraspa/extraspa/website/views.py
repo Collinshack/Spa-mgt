@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import ElectronicCardSumForm, ElectronicCardServiceForm, PhysicalCardSumForm, PhysicalCardServiceForm
-from .models import ElectronicCardSum, ElectronicCardService, PhysicalCardService, PhysicalCardSum
+from .forms import ElectronicCardSumForm, ElectronicCardServiceForm, PhysicalCardServiceForm
+from .models import ElectronicCardSum, ElectronicCardService, PhysicalCardService
 from django.conf import settings
 import qrcode
 from PIL import Image
@@ -39,10 +39,23 @@ def dashboard(request):
             # Filter ElectGen objects by the spa associated with the logged-in spa admin
             electronic_gens_sum = ElectronicCardSum.objects.filter(spa=spa_admin)
             electronic_gens_service = ElectronicCardService.objects.filter(spa=spa_admin)
+            paper_gens_service = PhysicalCardService.objects.filter(spa=spa_admin)
+            context = {'electronic_cards_sum': electronic_gens_sum, 'electronic_cards_service': electronic_gens_service, 'physical_cards_service': paper_gens_service}
+            return render(request, 'dashboard_summary.html', context)
+    return render(request, 'dashboard_summary.html')
+
+
+@login_required
+def electronic_cards_records(request):
+    if request.user.is_authenticated and hasattr(request.user, 'spa_admin'):
+        spa_admin = request.user.spa_admin
+        if spa_admin:
+            # Filter ElectGen objects by the spa associated with the logged-in spa admin
+            electronic_gens_sum = ElectronicCardSum.objects.filter(spa=spa_admin)
+            electronic_gens_service = ElectronicCardService.objects.filter(spa=spa_admin)
             context = {'electronic_cards_sum': electronic_gens_sum, 'electronic_cards_service': electronic_gens_service}
             return render(request, 'dashboard.html', context)
     return render(request, 'dashboard.html')
-
 
 
 
@@ -90,22 +103,6 @@ def logout_user(request):
 
 
 
-
-@login_required
-def generate_physical_card_sum(request):
-    datap= str(random.randint(99999, 999999))
-    form = PhysicalCardSumForm(request.POST or None, initial={'uniquec': datap})
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            if form.is_valid():
-                notekey = f"key is {form.cleaned_data['uniquec']}"
-                messages.success(request, notekey)
-                add_record = form.save()
-                return redirect('generate_physical_card_sum')
-        return render(request,'create_physical_card_sum.html', {'form': form})
-    else:
-        messages.success(request, 'You must be logged in')
-        return redirect('generate_physical_card_sum')
 
 
 
@@ -274,72 +271,6 @@ def electronic_card_service_display(request):
 
 
 
-# @login_required
-# def generate_electronic_card_service(request):
-#     if request.method == 'POST':
-#         form = ElectronicCardServiceForm(request.POST)
-#         if form.is_valid():
-#             unique_code = request.POST.get('uniquec')
-#             add_record = form.save(commit=False)
-#             add_record.uniquec = unique_code
-#             add_record.save()
-#             return redirect('electronic_card_service_display')
-#     else:
-#         unique_code = str(random.randint(99999, 999999))
-#         # Initialize the form with the initial value for 'value'
-#         form = ElectronicCardServiceForm(initial={'uniquec': unique_code, 'value': ''})  # Assuming 'value' should initially be empty
-#     return render(request, 'create_electronic_card_service.html', {'form': form})
-
-
-
-
-# @login_required
-# def electronic_card_service_display(request):
-#     if request.method == "GET":
-#         try:
-#             latest_entry = ElectronicCardService.objects.latest('id')
-#             card_image_path = "static/mysite/images/cards/cardd.jpg"
-#             card_image = Image.open(card_image_path)
-#             card_image = card_image.resize((350, 450))
-#             card_width, card_height = card_image.size
-#             combined_image = Image.new("RGB", (card_width, card_height))
-
-#             qr = qrcode.QRCode(
-#                 version=1,
-#                 error_correction=qrcode.constants.ERROR_CORRECT_L,
-#                 box_size=10,
-#                 border=4,
-#             )
-#             qr.add_data(latest_entry.uniquec)
-#             qr.make(fit=True)
-
-#             qr_image = qr.make_image(fill_color="black", back_color="white")
-
-#             center_x = card_width * 0.5
-#             center_y = card_height * 0.5
-#             right_offset = card_width * 0.25
-
-#             qr_size = min(card_width, card_height) * 0.2
-#             qr_x_offset = int(center_x + right_offset - qr_size / 2) + 13
-#             qr_y_offset = int(center_y - qr_size * 1.4)
-
-#             qr_image = qr_image.resize((int(qr_size), int(qr_size)))
-
-#             combined_image.paste(card_image, (0, 0))
-#             combined_image.paste(qr_image, (qr_x_offset, qr_y_offset))
-
-#             # Create an in-memory buffer to store the image
-#             combined_buffer = BytesIO()
-#             combined_image.save(combined_buffer, format='PNG')
-#             combined_buffer.seek(0)
-
-#             # Pass the unique code and the combined image buffer to the template
-#             return render(request, 'qrdisplay.html', {'data': latest_entry.uniquec, 'combined_image': combined_buffer})
-
-#         except ElectronicCardService.DoesNotExist:
-#             return HttpResponse("No entry found in ElectGen model.")
-        
-
 
 def electronic_card_sum_deduct_amount(request, pk):
     if request.method == 'POST'or 'GET':
@@ -353,8 +284,8 @@ def electronic_card_sum_deduct_amount(request, pk):
         amount = int(elect_gen.amount)
 
         if deduct_amount > amount:
-            messages.warning(request, "Insufficient funds!")
-            return redirect('dashboard')  # Redirect back to dashboard or any desired page
+            messages.warning(request, "Недостаточно средств!")
+            return redirect('electronic_cards_records')  # Redirect back to dashboard or any desired page
 
         # Deduct the specified amount
         amount -= deduct_amount
@@ -364,22 +295,23 @@ def electronic_card_sum_deduct_amount(request, pk):
 
         # Update status if amount is zero or less
         if amount <= 0:
-            elect_gen.status = "Spent"
+            elect_gen.status = "Потрачен"
 
         # Save the changes
         elect_gen.save()
 
         # Add a success message
-        messages.success(request, "Вывод успешен!")
+        messages.success(request, "успешное удержание суммы!")
 
-        return redirect('dashboard')
+        return redirect('electronic_cards_records')
 
 
 
-def physical_card_sum_deduct_amount(request, pk):
+
+def physical_card_service_deduct_amount(request, pk):
     if request.method == 'POST'or 'GET':
         # Retrieve the ElectGen object
-        elect_gen = get_object_or_404(PhysicalCardSum, pk=pk)
+        elect_gen = get_object_or_404(PhysicalCardService, pk=pk)
 
         # Get the amount entered by the spa admin
         deduct_amount = int(request.POST.get('deduct_amount'))
@@ -399,42 +331,7 @@ def physical_card_sum_deduct_amount(request, pk):
 
         # Update status if amount is zero or less
         if amount <= 0:
-            elect_gen.status = "Spent"
-
-        # Save the changes
-        elect_gen.save()
-
-        # Add a success message
-        messages.success(request, "успешное удержание суммы!")
-
-        return redirect('records')
-
-
-
-def physical_card_service_deduct_amount(request, pk):
-    if request.method == 'POST'or 'GET':
-        # Retrieve the ElectGen object
-        elect_gen = get_object_or_404(PhysicalCardService, pk=pk)
-
-        # Get the amount entered by the spa admin
-        deduct_amount = int(request.POST.get('deduct_amount'))
-
-        # Initialize amount to the current value
-        amount = int(elect_gen.purchased_frequency)
-
-        if deduct_amount > amount:
-            messages.warning(request, "Недостаточно средств!")
-            return redirect('records')  # Redirect back to dashboard or any desired page
-
-        # Deduct the specified amount
-        amount -= deduct_amount
-
-        # Update the amount field
-        elect_gen.purchased_frequency = str(amount) if amount >= 0 else "0"
-
-        # Update status if amount is zero or less
-        if amount <= 0:
-            elect_gen.status = "Spent"
+            elect_gen.status = "Потрачен"
 
         # Save the changes
         elect_gen.save()
@@ -458,7 +355,7 @@ def electronic_card_service_deduct_amount(request, pk):
 
         if deduct_amount > amount:
             messages.warning(request, "Недостаточно средств!")
-            return redirect('dashboard')  # Redirect back to dashboard or any desired page
+            return redirect('electronic_cards_records')  # Redirect back to dashboard or any desired page
 
         # Deduct the specified amount
         amount -= deduct_amount
@@ -468,15 +365,15 @@ def electronic_card_service_deduct_amount(request, pk):
 
         # Update status if amount is zero or less
         if amount <= 0:
-            elect_gen.status = "Spent"
+            elect_gen.status = "Потрачен"
 
         # Save the changes
         elect_gen.save()
 
         # Add a success message
-        messages.success(request, "Deduction successful!")
+        messages.success(request, "успешное удержание суммы!")
 
-        return redirect('dashboard')
+        return redirect('electronic_cards_records')
 
 
 
@@ -497,23 +394,14 @@ def records(request):
         spa_admin = request.user.spa_admin
         if spa_admin:
             # Filter ElectGen objects by the spa associated with the logged-in spa admin
-            paper_gens_sum = PhysicalCardSum.objects.filter(spa=spa_admin)
             paper_gens_service = PhysicalCardService.objects.filter(spa=spa_admin)
-            context = {'physical_cards_sum': paper_gens_sum, 'physical_cards_service': paper_gens_service}
+            context = {'physical_cards_service': paper_gens_service}
             return render(request, 'physical_cards_details.html', context)
     return render(request, 'physical_cards_details.html')
 
 
 
-def physical_card_sum_records(request):
-    if request.user.is_authenticated and hasattr(request.user, 'spa_admin'):
-        spa_admin = request.user.spa_admin
-        if spa_admin:
-            # Filter ElectGen objects by the spa associated with the logged-in spa admin
-            paper_gens_sum = PhysicalCardSum.objects.filter(spa=spa_admin)
-            context = {'physical_cards_sum': paper_gens_sum}
-            return render(request, 'physical_cards_sum_records.html', context)
-    return render(request, 'physical_cards_sum_records.html')
+
 
 
 
@@ -564,20 +452,6 @@ def search_physical_card_service(request):
     return HttpResponse()
 
 
-@login_required
-def search_physical_card_sum(request):
-    search_text = request.POST.get('search')
-    if request.user.is_authenticated and hasattr(request.user, 'spa_admin'):
-        spa_admin = request.user.spa_admin
-        if spa_admin:
-            # Filter ElectGen objects by the spa associated with the logged-in spa admin
-            customer_electronic_cards = PhysicalCardSum.objects.filter(spa=spa_admin)
-            results = PhysicalCardSum.objects.filter(uniquec__icontains=search_text, spa=spa_admin)
-            # Render the table body content only
-            table_body_html = render_to_string('physical_sum_search_results.html', {'physical_cards_sum': results})
-            return HttpResponse(table_body_html)
-    # Return an empty response if no results or unauthorized access
-    return HttpResponse()
 
 
 
@@ -597,17 +471,4 @@ def search_electronic_card_service(request):
             return HttpResponse(table_body_html)
     # Return an empty response if no results or unauthorized access
     return HttpResponse()
-
-# @login_required
-# def search_electronic_card_service_detail(request):
-#     if request.user.is_authenticated and hasattr(request.user, 'spa_admin'):
-#         spa_admin = request.user.spa_admin
-#         if spa_admin:
-#             # Filter ElectGen objects by the spa associated with the logged-in spa admin
-#             electronic_gens_sum = ElectronicCardSum.objects.filter(spa=spa_admin)
-#             electronic_gens_service = ElectronicCardService.objects.filter(spa=spa_admin)
-#             context = {'electronic_cards_sum': electronic_gens_sum, 'elctronic_cards_service': electronic_gens_service}
-#             return render(request, 'electronic_service_search_results.html', context)
-#     return render(request, 'electronic_service_search_results.html')
-        
 

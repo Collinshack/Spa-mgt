@@ -63,7 +63,7 @@
                                 <button type="submit">Вычитать</button>
                             </form>
                         </td>
-                        <td>{% if record.purchased_frequency == 0 %}<span style="color: red;">{{record.status}}</span>{% else %}<span style="color: green;">{{record.status}}</span>{% endif %}</td>
+                        <td>{% if record.purchased_frequency == 0 %}<span style="color: red;">Потрачен</span>{% else %}<span style="color: green;">Активен</span>{% endif %}</td>
                         <td>{{ record.created_at }}</td>
                     </tr>
                     

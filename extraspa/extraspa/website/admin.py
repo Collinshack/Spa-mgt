@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Spa, Service, ElectronicCardSum, ElectronicCardService, PhysicalCardSum, PhysicalCardService
+from .models import Spa, Service, ElectronicCardSum, ElectronicCardService, PhysicalCardService
 
 
 
@@ -19,15 +19,12 @@ class ElectronicCardServiceAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name', 'phone', 'type', 'uniquec', 'status', 'created_at']
     list_filter = ['service', 'type', 'status','created_at' ]
 
-class PhysicalCardSumAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'phone', 'type', 'amount', 'uniquec', 'status', 'created_at')
-    search_fields = ['first_name', 'last_name', 'phone', 'type', 'uniquec', 'status', 'created_at']
-    list_filter = ['amount', 'status', 'created_at']
+
     
 
 class PhysicalCardServiceAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'phone', 'type', 'service', 'purchased_frequency', 'uniquec', 'status', 'created_at')
-    search_fields = ['first_name', 'last_name', 'phone', 'type', 'uniquec', 'status', 'created_at']
+    list_display = ('first_name', 'last_name', 'type', 'service', 'amount', 'uniquec', 'status', 'created_at')
+    search_fields = ['first_name', 'last_name', 'type', 'uniquec', 'status', 'created_at']
     list_filter = ['service', 'type', 'status','created_at' ]
 
 
@@ -38,6 +35,5 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Spa, SpaAdmin)
 admin.site.register(ElectronicCardSum, ElectronicCardSumAdmin)
 admin.site.register(ElectronicCardService, ElectronicCardServiceAdmin)
-admin.site.register(PhysicalCardSum, PhysicalCardSumAdmin)
 admin.site.register(PhysicalCardService, PhysicalCardServiceAdmin)
 admin.site.register(Service, ServiceAdmin)

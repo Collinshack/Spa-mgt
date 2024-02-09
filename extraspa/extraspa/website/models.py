@@ -25,8 +25,8 @@ class Service(models.Model):
 
 class ElectronicCardSum(models.Model):
     STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('spent', 'Spent'),
+        ('Активен', 'Активен'),
+        ('Потрачен', 'Потрачен'),
     ]
     TYPE_CHOICES = [
         ('service', 'Service'),
@@ -40,21 +40,21 @@ class ElectronicCardSum(models.Model):
     amount = models.IntegerField()
     uniquec = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Активен')
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
     
     def save(self, *args, **kwargs):
         if self.amount == 0:
-            self.status = 'spent'
+            self.status = 'Потрачен'
         super().save(*args, **kwargs)
 
 class ElectronicCardService(models.Model):
 
     STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('spent', 'Spent'),
+        ('Активен', 'Активен'),
+        ('Потрачен', 'Потрачен'),
     ]
     TYPE_CHOICES = [
         ('service', 'Service'),
@@ -70,14 +70,14 @@ class ElectronicCardService(models.Model):
     purchased_frequency = models.IntegerField()
     uniquec = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Активен')
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
     
     def save(self, *args, **kwargs):
         if self.purchased_frequency == 0:
-            self.status = 'spent'
+            self.status = 'Потрачен'
         super().save(*args, **kwargs)
     
     @property
@@ -87,38 +87,21 @@ class ElectronicCardService(models.Model):
         return None
 
 
-class PhysicalCardSum(models.Model):
-    STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('spent', 'Spent'),
-    ]
-    TYPE_CHOICES = [
-        ('service', 'Service'),
-        ('sum', 'Sum'),
-    ]
-    spa = models.ForeignKey(Spa, on_delete=models.SET_NULL, related_name='paper_gens_sum', null=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    phone = models.CharField(max_length=30)
-    amount = models.IntegerField()
-    uniquec = models.CharField(max_length=30)
-    type = models.CharField(choices=TYPE_CHOICES, default='sum', max_length=10)
-    created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
     
     def save(self, *args, **kwargs):
-        if self.amount == 0:
-            self.status = 'spent'
+        if self.purchased_frequency == 0:
+            self.status = 'Потрачен'
         super().save(*args, **kwargs)
 
 
 class PhysicalCardService(models.Model):
     STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('spent', 'Spent'),
+        ('Активен', 'Активен'),
+        ('Потрачен', 'Потрачен'),
     ]
     TYPE_CHOICES = [
         ('service', 'Service'),
@@ -127,20 +110,20 @@ class PhysicalCardService(models.Model):
     spa = models.ForeignKey(Spa, on_delete=models.SET_NULL, related_name='paper_gens_service', null=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    phone = models.CharField(max_length=30)
-    purchased_frequency = models.IntegerField()
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    amount = models.IntegerField()
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True)
     uniquec = models.CharField(max_length=30)
     type = models.CharField(choices=TYPE_CHOICES, default='service', max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Активен')
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
     
     def save(self, *args, **kwargs):
-        if self.purchased_frequency == 0:
-            self.status = 'spent'
+        if self.amount == 0:
+            self.status = 'Потрачен'
         super().save(*args, **kwargs)
 
     @property

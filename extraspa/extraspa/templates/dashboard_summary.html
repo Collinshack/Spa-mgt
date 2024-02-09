@@ -1,0 +1,43 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+
+{% block content %}
+  
+
+<div class="container mt-3">
+    <h4>Добро пожаловать, {{ user.username }}</h4>
+
+    <h1>Резюме записи</h1>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Электронные карты по сумме</h5>
+                    <p class="card-text">Общая сумма: {{electronic_cards_sum.count}} </p>
+                    <a href="{% url 'electronic_cards_records' %}" class="btn btn-primary">просмотрите записи</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Электронные карты по услугу</h5>
+                    <p class="card-text">Общая сумма: {{ electronic_cards_service.count }}</p>
+                    <a href="{% url 'electronic_cards_records' %}" class="btn btn-primary">просмотрите записи</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Физические карты</h5>
+                    <p class="card-text">Общая сумма: {{ physical_cards_service.count }}</p>
+                    <a href="{% url 'records' %}" class="btn btn-primary">просмотрите записи</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
